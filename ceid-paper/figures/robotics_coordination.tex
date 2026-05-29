@@ -1,0 +1,19 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=9mm and 10mm,
+  box/.style={draw, rounded corners, align=left, text width=34mm, minimum height=10mm, inner sep=3pt},
+  flow/.style={-Latex, thick}
+]
+\node[box] (world) {Canonical world state:\\robots, tasks, tracks, links};
+\node[box, right=of world] (view) {Minimal state view:\\candidate robots\\candidate tasks\\candidate tracks};
+\node[box, right=of view] (edit) {Typed coordination edit:\\assign\_task / reassign\_task\\set\_mode / set\_lock\_state};
+\node[box, below=14mm of edit] (next) {Updated world state:\\new owner / mode / lock state};
+
+\draw[flow] (world) -- (view);
+\draw[flow] (view) -- (edit);
+\draw[flow] (edit) -- (next);
+\end{tikzpicture}
+\caption{Robotics coordination slice. A domain specialist predicts a typed edit from a compact world-state view rather than from unconstrained text alone.}
+\label{fig:robotics-coordination}
+\end{figure}

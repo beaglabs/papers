@@ -1,0 +1,29 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=6mm and 6mm,
+  box/.style={draw, rounded corners, align=center, text width=17mm, minimum height=8mm, inner sep=2.5pt, font=\small},
+  flow/.style={-Latex, thick}
+]
+\node[box] (input) {Natural-language\\task};
+\node[box, right=of input] (router) {General-model\\router};
+\node[box, right=of router] (state) {Canonical\\state};
+\node[box, right=of state] (scout) {Cooperative\\guidance};
+\node[box, right=of scout] (specialist) {Domain\\specialist};
+\node[box, right=of specialist] (validator) {Interface\\validator};
+\node[box, below=11mm of validator] (execute) {Typed\\execution};
+\node[box, left=of execute] (updated) {Updated\\canonical state};
+
+\draw[flow] (input) -- (router);
+\draw[flow] (router) -- (state);
+\draw[flow] (state) -- (scout);
+\draw[flow] (scout) -- (specialist);
+\draw[flow] (specialist) -- (validator);
+\draw[flow] (validator) -- (execute);
+\draw[flow] (execute) -- (updated);
+\draw[flow] (updated.west) -| ([yshift=-2mm]router.south);
+\draw[flow] (validator.south) |- ([yshift=-2mm]scout.south);
+\end{tikzpicture}%
+\caption{Pluggable SSTT architecture and information flow. A general controller routes requests to domain specialists through canonical state, optional cooperative guidance, and validator-backed typed execution. Feedback and repair loops are omitted from the labels for compactness but preserved in the arrows.}
+\label{fig:architecture-flow}
+\end{figure}

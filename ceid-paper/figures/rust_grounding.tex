@@ -1,0 +1,21 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=9mm and 10mm,
+  box/.style={draw, rounded corners, align=left, text width=36mm, minimum height=10mm, inner sep=3pt},
+  flow/.style={-Latex, thick}
+]
+\node[box] (task) {Instruction:\\Implement the From trait for DTO types};
+\node[box, right=of task] (broad) {Broad candidate set:\\many modules, many types};
+\node[box, right=of broad] (fail) {Base failure mode:\\wrong grounding / null IDs};
+\node[box, below=14mm of broad] (scout) {Scout narrowing:\\top-$k$ modules, top-$k$ types};
+\node[box, right=of scout] (fix) {Recovered typed edit:\\grounded moduleId\\grounded targetTypeId};
+
+\draw[flow] (task) -- (broad);
+\draw[flow] (broad) -- (fail);
+\draw[flow] (broad) -- (scout);
+\draw[flow] (scout) -- (fix);
+\end{tikzpicture}
+\caption{Rust grounding example. Cooperative narrowing reduces candidate ambiguity before final specialist decoding and improves grounded typed-edit recovery.}
+\label{fig:rust-grounding}
+\end{figure}

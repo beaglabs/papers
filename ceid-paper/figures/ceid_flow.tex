@@ -1,0 +1,25 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=8mm and 10mm,
+  box/.style={draw, rounded corners, align=center, text width=38mm, minimum height=12mm, inner sep=4pt, font=\small},
+  flow/.style={-Latex, thick}
+]
+\node[box] (runtime) {Runtime IDs and world state\\[0.3em]\texttt{robot\_v2\_11\_5}\\\texttt{task\_track\_11\_4}\\\texttt{track\_contact\_11\_5}};
+\node[box, right=of runtime] (rewrite) {CEID rewrite\\[0.3em]typed aliases + reverse map\\[0.3em]\texttt{robot.recon.w11.f}\\\texttt{task.track.w11.4}};
+\node[box, right=of rewrite] (specialist) {Specialist model\\[0.3em]instruction + aliased state\\$\rightarrow$ one typed action};
+
+\node[box, below=12mm of rewrite] (reverse) {Reverse map\\[0.3em]resolve model-facing IDs\\back to canonical runtime IDs};
+\node[box, right=of reverse] (validator) {Validator + execution\\[0.3em]schema checks, grounding checks,\\state transition};
+
+\draw[flow] (runtime) -- (rewrite);
+\draw[flow] (rewrite) -- (specialist);
+\draw[flow] (rewrite) -- (reverse);
+\draw[flow] (specialist.south) |- ([xshift=10mm]specialist.south |- reverse.north);
+\draw[flow] ([xshift=10mm]specialist.south |- reverse.north) -- (reverse.north);
+\draw[flow] (reverse) -- (validator);
+\end{tikzpicture}
+\Description{A left-to-right pipeline showing runtime IDs and world state flowing into a CEID rewrite step, then into a specialist model. The rewritten IDs also flow into a reverse-mapping step, which combines the model output with the alias map and passes the resolved action to validation and execution.}
+\caption{Canonical Entity ID pipeline. Runtime entities are rewritten into model-facing aliases before decoding, then resolved back to canonical IDs before validation and execution. The key requirement is consistency: state views, helper hints, and generated actions must all refer to entities in the same alias space.}
+\label{fig:ceid-flow}
+\end{figure}
